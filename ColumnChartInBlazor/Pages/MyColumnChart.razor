@@ -1,0 +1,54 @@
+﻿@*Pages\MyColumnChart.razor*@
+
+@page "/mycolumnchart"
+
+@using ColumnChartInBlazor.Services
+
+<h3>MyColumnChart</h3>
+
+<div>
+    @*IgbDataChartを置く*@
+    <IgbDataChart Height="400px" Width="800px"
+                ChartTitle="売上成績"
+                Subtitle="2022 年 6 月度"
+                Legend="Legend">
+            @*X 軸の設定*@
+            <IgbCategoryXAxis Name="xAxis" Label="Name" DataSource="Data"
+                            Title="担当者" Gap="0.2" />
+            @*Y 軸の設定*@
+            <IgbNumericYAxis Name="yAxis" Title="成績 (単位: 百万円)" TitleLeftMargin="10" MinimumValue="0" />
+            @*表示するデータの設定*@
+            <IgbColumnSeries Name="series1"
+                            Title="2022 年 6 月度"
+                            ValueMemberPath="Result"
+                            XAxisName="xAxis"
+                            YAxisName="yAxis"
+                            DataSource="Data">
+            </IgbColumnSeries>
+    </IgbDataChart>
+</div>
+<div class="legend">
+    @*凡例を置く*@
+    <IgbLegend @ref="Legend" Orientation="LegendOrientation.Horizontal" />
+</div>
+
+@code {
+    private List<SalesResult>? Data;
+
+    private IgbLegend? legend;
+    private IgbLegend? Legend
+    {
+        get { return legend; }
+        set
+        {
+            legend = value;
+            StateHasChanged();
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        // データを生成する。
+        Data = SampleSalesResults.Create();
+    }
+}
